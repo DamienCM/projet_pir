@@ -2,7 +2,7 @@
 ## Encadre par M. MOSSER Loic
 ### Realisation d'un robot holonome avec de nombreuses fonctionnalites
 
-[Realisation](https://puu.sh/HqlWj/9c79ee2674.png)
+![alt text](https://puu.sh/HqlWj/9c79ee2674.png)
 
 ----
 # Cahier des charges synthetique:
