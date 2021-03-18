@@ -1,4 +1,4 @@
-# Projet d'integration robotique
+# Projet d'integration robotique FULL OPEN SOURCE
 ## Encadre par M. MOSSER Loic
 ### Realisation d'un robot holonome avec de nombreuses fonctionnalites
 ----
@@ -28,3 +28,20 @@ La vision se decompose autour de plusieurs scripts python :
 3. Un/des algorithme.s permettant d'identifier les tags et de renvoyer leur position relative du robot dans la sortie standart ou dans un fichier texte. Il y a un ***vision.py***  permettant d'etre execute en rentrant les parametres dans le fichier, et un autre ****vision_inline.py*** qui permet de rentrer les arguments de maniere standart dans le shell : 
 >pi@rasberrypi: ~/dev/projet_pir $ sudo python3 vision_inline.py arg1 arg2 arg3
 4. Un script tres simple ***camera.py*** permettant de prendre une photo
+
+----
+
+# Asservissement 
+todo
+
+----
+
+# Actionneurs
+todo
+
+----
+
+# Lidar
+todo
+
+----
