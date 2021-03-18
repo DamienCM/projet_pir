@@ -19,6 +19,7 @@ Le projet se decompose en plusieurs sous repertoires :
 * Algorithme de vision OpenCV *vision*
 * Utilisation d'un Lidar permettant d'arreter le robot en cas de proximite d'un obstacle *lidar*
 
+----
 
 # Vision
 La vision se decompose autour de plusieurs scripts python :
