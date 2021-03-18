@@ -9,7 +9,7 @@
 ----
 # Fonctionnement du repertoire
 
-Pour utiliser le repertoire correctement il est necessaire de la placer sur la pi a l'emplacement suivant :
+Pour utiliser le repertoire correctement il est necessaire de placer le repertoire en local sur la pi a l'emplacement suivant :
 ***/home/pi/dev/projet_pir/***
 
 Le projet se decompose en plusieurs sous repertoires : 
