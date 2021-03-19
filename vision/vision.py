@@ -5,6 +5,7 @@ import time
 import os
 import numpy as np
 from datetime import datetime
+import IPython
 
 #parametres
 printing = True
@@ -120,6 +121,13 @@ if saving_txt :
         f.writelines(f"Resultats de la detection : {len(ids)} markers detectes\n")
         f.writelines("id, x, y, z\n")
         for i,id in enumerate(ids):
-            f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
+            xcam,ycam,zcam=tvecs[i][0][0],tvecs[i][0][1],tvecs[i][0][2]
+            with open(f'/home/pi/dev/projet_pir/vision/params/angle_camera.csv',mode='r') as ang :
+                L,H,dx = ang.readlines()[4].split(',')
+                L,H,dx = int(L),int(H),int(dx)
+                gamma = np.arctan2(H,L)
+                xrobot,yrobot,zrobot = xcam, np.cos(gamma)*ycam+np.sin(gamma)*zcam, np.cos(gamma)*zcam-np.sin(gamma)*ycam+dx
+                f.writelines(f'{id[0]}, {xrobot}, {yrobot}, {zrobot}\n')
         if printing :
             print(f'writing output in {f.name}')
+IPython.embed()

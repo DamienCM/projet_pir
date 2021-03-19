@@ -163,3 +163,6 @@ while not trigger :
                 f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
             if printing :
                 print(f'writing output in {f.name}')
+
+#play megalovania
+#RPi.GPIO...
