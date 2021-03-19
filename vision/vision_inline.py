@@ -5,39 +5,61 @@ import time
 import os
 import numpy as np
 from datetime import datetime
+import sys,getopt
 
 #parametres
-printing = True
-saving_txt = True
-display = True
-delay = True
+printing = True # as -p
+saving_txt = True #as -s
+display = False #as -d
+delay = False #as -t tempo
+
+# Read command line args
+myopts, args = getopt.getopt(sys.argv[1:],"p:s:d:t:")
+for o, a in myopts:
+    if o == '-p':
+        printing=bool(a)
+    elif o == '-s':
+        saving_txt=bool(a)
+    elif o == '-d':
+        display=bool(a)
+    elif o == '-t':
+        delay=bool(a)
+    else:
+        raise ValueError(f"Usage: -d display -s saving -t tempo -p printing \nInput argument error unknown : {o}")
 
 
-path = '/home/pi/dev/projet_pir/vision/out/test/'
-
+#dossier de sauvegarde
+path = '/home/pi/dev/projet_pir/vision/out/test/' 
 now = datetime.now()
 save_dir = path + now.strftime("%d_%m_%Y-%H-%M-%S")
 
+
+#temporisation
 if delay  :
     for i in range(4):
-        time.sleep(1)
         print(f'starting in {4-i}')   
+        time.sleep(1)
     print('starting ...')
 try:
-    os.mkdir(f'{save_dir}/')
+    os.mkdir(f'{save_dir}')
 except:
-    pass
+    raise ValueError('Impossible de creer le dossier de sauvegarde')
 
+
+#prise de photo
 # camera = picamera.PiCamera()
 # camera.rotation = 180
 # camera.capture('{save_dir}/test_aruco.jpg')
 if printing:
     print('taking picture : done')
-#precise the aruco dictionnary that we're using
 
+
+#precise the aruco dictionnary that we're using
 arucoDict = arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 if printing:
     print('loading dict : done')
+
+
 #create basics aruco params
 arucoParams = cv2.aruco.DetectorParameters_create()
 
