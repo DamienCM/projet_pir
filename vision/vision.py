@@ -113,6 +113,8 @@ try :
     cv2.destroyAllWindows()
 
 except :
+    if printing:
+        print("aucune distance a calculer")
     pass
 
 #saving in text file
@@ -130,4 +132,3 @@ if saving_txt :
                 f.writelines(f'{id[0]}, {xrobot}, {yrobot}, {zrobot}\n')
         if printing :
             print(f'writing output in {f.name}')
-IPython.embed()

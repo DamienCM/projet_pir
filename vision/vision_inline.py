@@ -135,6 +135,8 @@ try :
     cv2.destroyAllWindows()
 
 except :
+    if printing:
+        print("aucune distance a calculer")
     pass
 
 #saving in text file
