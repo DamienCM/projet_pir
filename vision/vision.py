@@ -24,9 +24,9 @@ if delay  :
         print(f'starting in {4-i}')   
     print('starting ...')
 try:
-    os.mkdir(f'{save_dir}/')
+    os.mkdir(f'{save_dir}')
 except:
-    pass
+    raise ValueError('Impossible de creer le dossier de sauvegarde')
 
 # camera = picamera.PiCamera()
 # camera.rotation = 180
@@ -35,7 +35,7 @@ if printing:
     print('taking picture : done')
 #precise the aruco dictionnary that we're using
 
-arucoDict = arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+arucoDict = arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_100)
 if printing:
     print('loading dict : done')
 #create basics aruco params
@@ -92,7 +92,7 @@ if printing:
 
 
 #estimation des orientations/translations
-rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,25, mtx, dist) 
+rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,100, mtx, dist) 
 if printing:
     print('estimating pose : done')
 
@@ -121,5 +121,5 @@ if saving_txt :
         f.writelines("id, x, y, z\n")
         for i,id in enumerate(ids):
             f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
-if printing :
-    print(f'writing output in {f.name}')
+        if printing :
+            print(f'writing output in {f.name}')

@@ -55,7 +55,7 @@ if printing:
 
 
 #precise the aruco dictionnary that we're using
-arucoDict = arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+arucoDict = arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_100)
 if printing:
     print('loading dict : done')
 
@@ -114,7 +114,7 @@ if printing:
 
 
 #estimation des orientations/translations
-rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,25, mtx, dist) 
+rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,100, mtx, dist) 
 if printing:
     print('estimating pose : done')
 
@@ -124,6 +124,7 @@ try :
     for i in range(len(rvecs)):
         rvec,tvec,numero=rvecs[i],tvecs[i],ids[i]
         img = cv2.aruco.drawAxis(original_image,mtx,dist,rvec,tvec,100) #affichage
+        #img = cv2.circle(img,(int(len(img/2)),int(len(img[0]/2))), 63, (0,0,255), -1)
     if printing:
         print('drawing Axis : done')
     curent = 'axis'
@@ -143,5 +144,5 @@ if saving_txt :
         f.writelines("id, x, y, z\n")
         for i,id in enumerate(ids):
             f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
-if printing :
-    print(f'writing output in {f.name}')
+        if printing :
+            print(f'writing output in {f.name}')
