@@ -31,6 +31,7 @@ except:
 
 # camera = picamera.PiCamera()
 # camera.rotation = 180
+#camera.resolution = (1920,1080)
 # camera.capture('{save_dir}/test_aruco.jpg')
 if printing:
     print('taking picture : done')

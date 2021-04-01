@@ -2,4 +2,4 @@ Afin de calculer l'angle de la camera on a besoin :
     - De la hauteur de la camera (mesure cao ou reele) par rapport au sol : H
     - De la distance entre l'extremite du robot et le centre du tag arUco : D
 H, L, dx
-100, 300, 50
+124, 790, 0

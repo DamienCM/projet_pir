@@ -10,7 +10,7 @@ import RPi.GPIO
 
 #parametres
 printing = True
-saving_txt = False
+saving_txt = True
 display = False
 
 
@@ -28,6 +28,7 @@ except:
 trigger = False
 camera = picamera.PiCamera()
 camera.rotation = 180
+camera.resolution = (1920,1080)
 
 while not trigger :
     print('-------------------------')
@@ -36,7 +37,6 @@ while not trigger :
         time.sleep(1)
  
     print('starting ...')
-
 
     camera.capture(f'{save_dir}/original.jpg')
     if printing:
@@ -108,7 +108,7 @@ while not trigger :
 
 
     #estimation des orientations/translations
-    rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,100, mtx, dist) 
+    rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,25, mtx, dist) 
     if printing:
         print('estimating pose : done')
 
@@ -135,6 +135,7 @@ while not trigger :
                 trigger=True
                 print('Distance acceptee')
             print(f'Distance mesuree :{round(distance_mes,1)}mm')
+            print('Dans le repere de la camera')
             if x>0:
                 print("decaler le tag sur la gauche")
             else:
@@ -154,15 +155,15 @@ while not trigger :
     except :
         pass
 
-    #saving in text file
-    if saving_txt :
-        with open(f'{save_dir}/resultats.csv',mode='w') as f :
-            f.writelines(f"Resultats de la detection : {len(ids)} markers detectes\n")
-            f.writelines("id, x, y, z\n")
-            for i,id in enumerate(ids):
-                f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
-            if printing :
-                print(f'writing output in {f.name}')
+#saving in text file
+#    if saving_txt :
+#        with open(f'{save_dir}/resultats.csv',mode='w') as f :
+#            f.writelines(f"Resultats de la detection : {len(ids)} markers detectes\n")
+#            f.writelines("id, x, y, z\n")
+#            for i,id in enumerate(ids):
+#                f.writelines(f'{id[0]}, {tvecs[i][0][0]}, {tvecs[i][0][1]}, {tvecs[i][0][1]}\n')
+#            if printing :
+#                print(f'writing output in {f.name}')
 
 #play megalovania
 #RPi.GPIO...

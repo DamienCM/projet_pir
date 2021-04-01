@@ -17,16 +17,17 @@ delay = False #as -t tempo
 myopts, args = getopt.getopt(sys.argv[1:],"p:s:d:t:")
 for o, a in myopts:
     if o == '-p':
-        printing=bool(a)
+        printing = (a=='True' or a == 'true' or a==1)
     elif o == '-s':
-        saving_txt=bool(a)
+        saving_txt = (a=='True' or a == 'true' or a==1)
     elif o == '-d':
-        display=bool(a)
+        display = (a=='True' or a == 'true' or a==1)
     elif o == '-t':
-        delay=bool(a)
+        delay = (a=='True' or a == 'true' or a==1)
     else:
         raise ValueError(f"Usage: -d display -s saving -t tempo -p printing \nInput argument error unknown : {o}")
 
+print(f'Running script with following options : display = {display}, saving = {saving_txt}, tempo = {delay}, printing = {printing}')
 
 #dossier de sauvegarde
 path = '/home/pi/dev/projet_pir/vision/out/test/' 
@@ -47,9 +48,10 @@ except:
 
 
 #prise de photo
-# camera = picamera.PiCamera()
-# camera.rotation = 180
-# camera.capture('{save_dir}/test_aruco.jpg')
+camera = picamera.PiCamera()
+camera.rotation = 180
+camera.resolution = (1920,1080)
+camera.capture(f'{save_dir}/original.jpg')
 if printing:
     print('taking picture : done')
 
@@ -72,7 +74,7 @@ if printing:
 
 #loads the image
 #original_image = cv2.imread('{save_dir}/test_aruco.jpg')
-original_image = cv2.imread('/home/pi/dev/projet_pir/vision/out/test/16_03_2021-19-07-58/original.jpg')
+original_image = cv2.imread(f'{save_dir}/original.jpg')
 if printing:
     print('loading image : done')
 
@@ -97,11 +99,16 @@ if printing:
 #detection des markers
 (corners, ids, rejected) = cv2.aruco.detectMarkers(img, arucoDict,
 	parameters=arucoParams,cameraMatrix=mtx , distCoeff=dist)
-if printing:
-    print(f'detecting markers : {len(ids)} markers detected')
+
+if ids is None :
+    n_detected = 0
+else :
+    n_detected = len(ids)
+
+if printing :
+    print(f'detecting markers : {n_detected} markers detected')
     if ids is not None:
         print(f'Markers detectes :' , np.transpose(ids)[0])
-
 
 #drawing detected markers
 img = cv2.aruco.drawDetectedMarkers(img,corners,ids,borderColor=(255,0,0)) #affichage
@@ -114,7 +121,7 @@ if printing:
 
 
 #estimation des orientations/translations
-rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,100, mtx, dist) 
+rvecs, tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners,150, mtx, dist) 
 if printing:
     print('estimating pose : done')
 
@@ -142,15 +149,25 @@ except :
 #saving in text file
 if saving_txt :
     with open(f'{save_dir}/resultats.csv',mode='w') as f :
-        f.writelines(f"Resultats de la detection : {len(ids)} markers detectes\n")
+        f.writelines(f"Resultats de la detection : {n_detected} markers detectes\n")
         f.writelines("id, x, y, z\n")
-        for i,id in enumerate(ids):
-            xcam,ycam,zcam=tvecs[i][0][0],tvecs[i][0][1],tvecs[i][0][2]
-            with open(f'/home/pi/dev/projet_pir/vision/params/angle_camera.csv',mode='r') as ang :
-                L,H,dx = ang.readlines()[4].split(',')
-                L,H,dx = int(L),int(H),int(dx)
-                gamma = np.arctan2(H,L)
-                xrobot,yrobot,zrobot = xcam, np.cos(gamma)*ycam+np.sin(gamma)*zcam, np.cos(gamma)*zcam-np.sin(gamma)*ycam+dx
-                f.writelines(f'{id[0]}, {xrobot}, {yrobot}, {zrobot}\n')
+        if ids is not None:
+            for i,id in enumerate(ids):
+                xcam,ycam,zcam=tvecs[i][0][0],tvecs[i][0][1],tvecs[i][0][2]
+                with open(f'/home/pi/dev/projet_pir/vision/params/angle_camera.csv',mode='r') as ang :
+                    H,L,dx = ang.readlines()[4].split(',')
+                    H,L,dx = int(H),int(L),int(dx)
+                    gamma = np.arctan2(H,L)
+                    xrobot,yrobot,zrobot = xcam, np.cos(gamma)*ycam+np.sin(gamma)*zcam, np.cos(gamma)*zcam-np.sin(gamma)*ycam+dx
+                    f.writelines(f'{id[0]}, {xrobot}, {yrobot}, {zrobot}\n')
+                    if printing:
+                      print('id, x, y, z')
+                      print(f'{id[0]}, {xcam}, {ycam}, {zcam}')
+
+                      print(f'{id[0]}, {xrobot}, {yrobot}, {zrobot}')
+                      print('--------------')
+                      
+        else : 
+            f.writelines(f'{-1}, {-1}, {-1}, {-1}\n')
         if printing :
             print(f'writing output in {f.name}')
