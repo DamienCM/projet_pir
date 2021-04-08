@@ -1,35 +1,16 @@
-import lidar.lidar_inline
-import threading
+import lidar.lidar_inline as lidar
+import vision.vision as vision
 
-
-# try:
-#     print('moteurs allumes')
-#     main_lidar()
-# except DangerProximite:
-#     print('etteindre moteur DNA')
-
-
+#execute les donnees de vision
+# os.system('sudo python  vision/vision_inline.py')
 
 
 
 
 if __name__ == "__main__":
     print('debut')
-    x = threading.Thread(target=lidar.lidar_inline.main)
-    print('on commence le thread')
-    x.start()
-    print('on demaree le lidar')
-    x .join()
-    #ARRET MOTEURS
-
-    #code qui ne marche pas
-    # print('debut')
-    # x = threading.Thread(target=lidar.lidar_inline.main)
-    # print('on commence le thread')
-    # try :
-    #     x.start()
-    #     print('on demaree le lidar')
-    #     x .join()
-    #     #ARRET MOTEURS
-    # except Exeption presente dans le thread:
-    #     doSomthing()
+    print('on unitialise lobjet lidar')
+    lid = lidar.MyLidar()
+    print('on demmare le lidar')
+    lid.start()
+    print('on peut continuer le main')
