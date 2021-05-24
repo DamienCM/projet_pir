@@ -1,4 +1,4 @@
-# Projet d'intégration robotique FULL OPEN SOURCE
+# Projet d'intégration robotique open source
 ## Encadré par M. MOSSER Loic
 ### Réalisation d'un robot holonome avec de nombreuses fonctionnalités
 
