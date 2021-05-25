@@ -42,7 +42,7 @@ class MyLidar(Thread):
                         counter += 1
                     else :
                         counter = 0
-                    
+                        self.dangerProximite=False
                     if counter > 2 : #nombre de tours consecutif pour considerer qu'un obstacles est bien present
                         self.dangerProximite = True
                         self.i+=1
@@ -63,7 +63,7 @@ class MyLidar(Thread):
 
 def process_data(data):
     trigger = False 
-    if min(data)<300:
+    if min(data)<800: #distance d'arret
         trigger=True
             
     return trigger
