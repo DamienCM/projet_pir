@@ -36,7 +36,6 @@ class MyLidar(Thread):
         scan_data = [0]*360
 
         while True:
-
             try:
                 #print(lidar.info)
                 counter = 0

@@ -14,3 +14,4 @@ if __name__ == "__main__":
     print('on demmare le lidar')
     lid.start()
     print('on peut continuer le main')
+    
