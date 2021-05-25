@@ -50,6 +50,7 @@ class MyLidar(Thread):
                     
                     if counter > 10 :
                         self.dangerProximite = True
+                        print()
 
             except adafruit_rplidar.RPLidarException as e:
                 lidar.stop_motor()
@@ -65,12 +66,12 @@ class MyLidar(Thread):
 
 
 def process_data(data,lcd,max_distance):
-    lcd.fill((0,0,0))
+    lcd.fill((0,0,0)) 
     trigger = False    
     for angle in range(360):
         distance = data[angle]
         if distance > 0:   
-            if distance < 500:               # ignore initially ungathered data points
+            if distance < 200:               #penser a remettre 500 # ignore initially ungathered data points
                 # print(f'Distance = {distance}')
                 # print ("Objet detecte")
                 trigger =True
