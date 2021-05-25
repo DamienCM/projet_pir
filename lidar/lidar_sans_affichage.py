@@ -1,6 +1,6 @@
 import os
-from math import cos, sin, pi, floor
-import pygame
+from numpy import min,array,logical_and,reshape
+from math import floor
 import adafruit_rplidar
 from adafruit_rplidar import RPLidar
 import IPython
@@ -14,15 +14,12 @@ class MyLidar(Thread):
     def __init__(self):
         super(MyLidar, self).__init__()
         self.dangerProximite = False
+        self.i = 0
 
     def run(self):
         # Set up pygame and the display
         os.putenv('SDL_FBDEV', '/dev/fb1')
-        pygame.init()
-        lcd = pygame.display.set_mode((320,240))
-        pygame.mouse.set_visible(False)
-        lcd.fill((0,0,0))
-        pygame.display.update()
+
 
         # Setup the RPLidar
         PORT_NAME = '/dev/ttyUSB0'
@@ -40,17 +37,16 @@ class MyLidar(Thread):
                 #print(lidar.info)
                 counter = 0
                 for scan in lidar.iter_scans():
-
-                    for (_, angle, distance) in scan:
-                        scan_data[min([359, floor(angle)])] = distance
-                    if process_data(scan_data,lcd,max_distance) :
+                    distance = (array(scan))[:,2]
+                    if process_data(distance) :
                         counter += 1
                     else :
                         counter = 0
                     
-                    if counter > 10 :
+                    if counter > 2 : #nombre de tours consecutif pour considerer qu'un obstacles est bien present
                         self.dangerProximite = True
-                        print()
+                        self.i+=1
+                        print(f"Obstacle detecte depuis le lidar {self.i}")
 
             except adafruit_rplidar.RPLidarException as e:
                 lidar.stop_motor()
@@ -65,21 +61,9 @@ class MyLidar(Thread):
 
 
 
-def process_data(data,lcd,max_distance):
-    lcd.fill((0,0,0)) 
-    trigger = False    
-    for angle in range(360):
-        distance = data[angle]
-        if distance > 0:   
-            if distance < 200:               #penser a remettre 500 # ignore initially ungathered data points
-                # print(f'Distance = {distance}')
-                # print ("Objet detecte")
-                trigger =True
-            max_distance = max([min([5000, distance]), max_distance])
-            radians = angle * pi / 180.0
-            x = distance * cos(radians)
-            y = distance * sin(radians)
-            point = (160 + int(x / max_distance * 119), 120 + int(y / max_distance * 119))
-            lcd.set_at(point, pygame.Color(255, 255, 255))
-    pygame.display.update()
+def process_data(data):
+    trigger = False 
+    if min(data)<300:
+        trigger=True
+            
     return trigger
