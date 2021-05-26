@@ -55,15 +55,12 @@ class MyLidar(Thread):
                 lidar = RPLidar(None, PORT_NAME)
                 print('erreur de demarrage')
 
-        lidar.stop_motor()
-        lidar.stop()
-        lidar.disconnect()
 
 
 
 def process_data(data):
     trigger = False 
-    if min(data)<800: #distance d'arret
+    if min(data)<800: #distance d'arret *800
         trigger=True
             
     return trigger
